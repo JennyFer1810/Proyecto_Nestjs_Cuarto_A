@@ -29,6 +29,7 @@ export class TareasService {
   findAll(paginacionDto: PaginacionDto) {
     const { limit = 10, offset = 1 } = paginacionDto;
     return this.producRepository.find({
+      relations: ['tarea'],
       take: limit,
       skip: offset
     });

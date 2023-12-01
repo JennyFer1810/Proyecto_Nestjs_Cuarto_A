@@ -1,25 +1,27 @@
 import { InjectRepository } from "@nestjs/typeorm";
-import { Column, Entity, PrimaryGeneratedColumn, Repository } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn, Repository } from "typeorm";
 import { CreateTareaDto } from "../dto/create-tarea.dto";
+import { Docente } from "./docente.entity";
+import { Alumno } from "./alumno.entity";
 
 @Entity('tarea', { schema: 'public' })
-export class Tarea{
+export class Tarea {
     @PrimaryGeneratedColumn('increment')
-    id:number;
+    id: number;
 
-    @Column('varchar',{
-        name:'title_task',
+    @Column('varchar', {
+        name: 'title_task',
         nullable: false,
-        comment:'title task'
+        comment: 'title task'
     })
-    title_task:string;
+    title_task: string;
 
-    @Column('varchar',{
-        name:'description',
-        nullable:false,
-        comment:'task description'
+    @Column('varchar', {
+        name: 'description',
+        nullable: false,
+        comment: 'task description'
     })
-    description:string;
+    description: string;
 
     @Column('integer', {
         name: 'note',
@@ -28,12 +30,12 @@ export class Tarea{
     })
     note: number;
 
-    @Column('varchar',{
-        name:'asignature',
-        nullable:false,
-        comment:'asignature name'
+    @Column('varchar', {
+        name: 'asignature',
+        nullable: false,
+        comment: 'asignature name'
     })
-    asignature:string;
+    asignature: string;
 
     @Column('date', {
         name: 'deliver_date',
@@ -41,5 +43,13 @@ export class Tarea{
         comment: 'deliver date'
     })
     deliver_date: string;
-    
+
+    // Relación Tarea - Docente 
+    @ManyToOne(() => Docente, docente => docente.tareas)
+    docente: Docente;
+
+    // Relación Tarea - Alumnos 
+    @ManyToMany(() => Alumno)
+    @JoinTable()
+    alumnos: Alumno[];
 }
